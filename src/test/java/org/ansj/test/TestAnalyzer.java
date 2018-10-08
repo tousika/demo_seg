@@ -16,6 +16,7 @@ public class TestAnalyzer {
         System.out.println(IndexAnalysis.parse("长春电影节").recognition(re));
         System.out.println(ToAnalysis.parse("中美智库对话").recognition(re));
         System.out.println(IndexAnalysis.parse("中美智库对话").recognition(re));
+        System.out.println(IndexAnalysis.parse("上海南京东路战略招标").recognition(re));
 
 
     }

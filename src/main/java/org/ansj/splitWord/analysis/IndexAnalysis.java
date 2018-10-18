@@ -61,19 +61,21 @@ public class IndexAnalysis extends Analysis {
 			 */
 			private Set<String> filterSpanTerm(){
 				int length = graph.terms.length - 1;
-				String[][] array= new String[length][length];
-				int row = 0;
-				for (int i = 0; i < length; i++) {
-					if (graph.terms[i] != null) {
-						char[] c = graph.terms[i].getName().toCharArray();
-						array[row][0]= String.valueOf(c[0])+(graph.terms[i].getOffe()-1);
-						array[row][1]=String.valueOf(c[c.length-1]);
-						row++;
-					}
-				}
 				Set<String> r = new HashSet<>();
-				for(int i=0;i<row-1;i++){
-					r.add(array[i][1]+array[i+1][0]);
+				if (length > 1) {
+					String[][] array= new String[length][length];
+					int row = 0;
+					for (int i = 0; i < length; i++) {
+						if (graph.terms[i] != null) {
+							char[] c = graph.terms[i].getName().toCharArray();
+							array[row][0]= String.valueOf(c[0])+(graph.terms[i].getOffe()-1);
+							array[row][1]=String.valueOf(c[c.length-1]);
+							row++;
+						}
+					}
+					for(int i=0;i<row-1;i++){
+						r.add(array[i][1]+array[i+1][0]);
+					}
 				}
 				return r;
 			}

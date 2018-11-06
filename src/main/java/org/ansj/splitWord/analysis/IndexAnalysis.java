@@ -101,6 +101,7 @@ public class IndexAnalysis extends Analysis {
 					}
 				}
 				Set<String> filterSet = filterSpanTerm(); //对应v5.1.5.3
+				filterSet.addAll(graph.rmTerms);
 //				filterSet = new HashSet<>(); //重置filterSpanTerm的结果,对应v5.1.5.2
 				LinkedList<Term> last = new LinkedList<Term>();
 
@@ -147,6 +148,10 @@ public class IndexAnalysis extends Analysis {
 		super();
 	}
 
+	public IndexAnalysis(boolean userDefine) {
+		super(userDefine);
+	}
+
 	public IndexAnalysis(Reader reader) {
 		super.resetContent(new AnsjReader(reader));
 	}
@@ -157,6 +162,14 @@ public class IndexAnalysis extends Analysis {
 
 	public static Result parse(String str, Forest... forests) {
 		return new IndexAnalysis().setForests(forests).parseStr(str);
+	}
+
+	public static Result parse(boolean userDefine, String str) {
+		return new IndexAnalysis(userDefine).parseStr(str);
+	}
+
+	public static Result parse(boolean userDefine, String str, Forest... forests) {
+		return new IndexAnalysis(userDefine).setForests(forests).parseStr(str);
 	}
 
 }

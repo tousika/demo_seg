@@ -4,6 +4,7 @@ import org.ansj.domain.*;
 import org.ansj.library.AmbiguityLibrary;
 import org.ansj.library.DATDictionary;
 import org.ansj.library.DicLibrary;
+import org.ansj.library.UserDicLibrary;
 import org.ansj.splitWord.impl.GetWordsImpl;
 import org.ansj.util.AnsjReader;
 import org.ansj.util.Graph;
@@ -55,21 +56,33 @@ public abstract class Analysis {
 	// 是否标记新词
 	protected boolean isNewWord = true;
 
+	// 是否选择自定义词典
+	protected boolean userDefine = false;
+
 	/**
 	 * 文档读取流
 	 */
 	private AnsjReader br;
 
 	protected Analysis() {
-		this.forests = new Forest[]{DicLibrary.get()};
+//		this.forests = new Forest[]{DicLibrary.get()};
+//		this.isNameRecognition = MyStaticValue.isNameRecognition;
+//		this.isNumRecognition = MyStaticValue.isNumRecognition;
+//		this.isQuantifierRecognition = MyStaticValue.isQuantifierRecognition;
+//		this.isRealName = MyStaticValue.isRealName;
+//		this.isNewWord = MyStaticValue.isNewWord;
+//		this.userDefine = false;
+		this(false);
+	}
+
+	protected Analysis(boolean userDefine) {
+		this.forests = new Forest[]{ userDefine ? UserDicLibrary.get() : DicLibrary.get() };
 		this.isNameRecognition = MyStaticValue.isNameRecognition;
 		this.isNumRecognition = MyStaticValue.isNumRecognition;
 		this.isQuantifierRecognition = MyStaticValue.isQuantifierRecognition;
 		this.isRealName = MyStaticValue.isRealName;
 		this.isNewWord = MyStaticValue.isNewWord;
 	}
-
-	;
 
 	private LinkedList<Term> terms = new LinkedList<Term>();
 
@@ -137,15 +150,22 @@ public abstract class Analysis {
 		if (this.ambiguityForest != null) {
 			GetWord gw = new GetWord(this.ambiguityForest, gp.chars);
 			String[] params = null;
+			StringBuffer crossDomain = null;
 			while ((gw.getFrontWords()) != null) {
 				if (gw.offe > startOffe) {
 					analysis(gp, startOffe, gw.offe);
 				}
 				params = gw.getParams();
 				startOffe = gw.offe;
+				crossDomain = new StringBuffer();
 				for (int i = 0; i < params.length; i += 2) {
 					gp.addTerm(new Term(params[i], startOffe, new TermNatures(new TermNature(params[i + 1], 1))));
+					if (params.length > 2) crossDomain.append((i/2) == 0 ? params[i].substring(params[i].length() - 1) : params[i].substring(0, 1));
 					startOffe += params[i].length();
+				}
+				if (params.length > 2){
+					crossDomain.append(gw.offe+params[0].length()-1);
+					gp.rmTerms.add(crossDomain.toString());
 				}
 			}
 		}

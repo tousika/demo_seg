@@ -74,6 +74,10 @@ public class ToAnalysis extends Analysis {
 		super();
 	}
 
+	public ToAnalysis(boolean userDefine) {
+		super(userDefine);
+	}
+
 	public ToAnalysis(Reader reader) {
 		super.resetContent(new AnsjReader(reader));
 	}
@@ -84,6 +88,14 @@ public class ToAnalysis extends Analysis {
 
 	public static Result parse(String str, Forest... forests) {
 		return new ToAnalysis().setForests(forests).parseStr(str);
+	}
+
+	public static Result parse(boolean userDefine, String str) {
+		return new ToAnalysis(userDefine).parseStr(str);
+	}
+
+	public static Result parse(boolean userDefine, String str, Forest... forests) {
+		return new ToAnalysis(userDefine).setForests(forests).parseStr(str);
 	}
 
 }

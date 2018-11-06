@@ -9,8 +9,10 @@ import org.ansj.splitWord.Analysis.Merger;
 import org.ansj.util.TermUtil.InsertTermType;
 import org.nlpcn.commons.lang.util.WordAlert;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 最短路径
@@ -20,6 +22,7 @@ import java.util.Map;
 public class Graph {
 	public char[] chars = null;
 	public Term[] terms = null;
+	public Set<String> rmTerms = null;
 	protected Term end = null;
 	protected Term root = null;
 	protected static final String B = "BEGIN";
@@ -38,6 +41,7 @@ public class Graph {
 		this.str = str ;
 		this.chars = WordAlert.alertStr(str);
 		terms = new Term[chars.length + 1];
+		rmTerms = new HashSet<>();
 		end = new Term(E, chars.length, AnsjItem.END);
 		root = new Term(B, -1, AnsjItem.BEGIN);
 		terms[chars.length] = end;
@@ -48,6 +52,7 @@ public class Graph {
 		int beginOff = result.get(0).getOffe();
 		int len = last.getOffe() - beginOff + last.getName().length();
 		terms = new Term[len + 1];
+		rmTerms = new HashSet<>();
 		end = new Term(E, len, AnsjItem.END);
 		root = new Term(B, -1, AnsjItem.BEGIN);
 		terms[len] = end;

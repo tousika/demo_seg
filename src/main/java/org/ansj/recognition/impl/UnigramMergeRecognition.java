@@ -1,18 +1,12 @@
-package org.ansj.recognition.arrimpl;
+package org.ansj.recognition.impl;
 
 import org.ansj.domain.Nature;
 import org.ansj.domain.Result;
 import org.ansj.domain.Term;
-import org.ansj.domain.TermNatures;
-import org.ansj.library.DATDictionary;
 import org.ansj.recognition.Recognition;
-import org.ansj.recognition.TermArrRecognition;
-import org.ansj.util.Graph;
 import org.ansj.util.TermUtil;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by dongsijia on 2018/11/8.
@@ -25,6 +19,7 @@ public class UnigramMergeRecognition implements Recognition {
     static {
         nsGroup.put("vn","n");
         nsGroup.put("nn","nw");
+        nsGroup.put("mv","v");
     }
     @Override
     public void recognition(Result result) {

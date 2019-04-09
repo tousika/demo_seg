@@ -148,8 +148,8 @@ public class IndexAnalysis extends Analysis {
 		super();
 	}
 
-	public IndexAnalysis(boolean userDefine) {
-		super(userDefine);
+	public IndexAnalysis(String userDefineKey) {
+		super(userDefineKey);
 	}
 
 	public IndexAnalysis(Reader reader) {
@@ -164,12 +164,12 @@ public class IndexAnalysis extends Analysis {
 		return new IndexAnalysis().setForests(forests).parseStr(str);
 	}
 
-	public static Result parse(boolean userDefine, String str) {
-		return new IndexAnalysis(userDefine).parseStr(str);
+	public static Result parse(String userDefineKey, String str) {
+		return new IndexAnalysis(userDefineKey).parseStr(str);
 	}
 
-	public static Result parse(boolean userDefine, String str, Forest... forests) {
-		return new IndexAnalysis(userDefine).setForests(forests).parseStr(str);
+	public static Result parse(String userDefineKey, String str, Forest... forests) {
+		return new IndexAnalysis(userDefineKey).setForests(forests).parseStr(str);
 	}
 
 }

@@ -56,9 +56,6 @@ public abstract class Analysis {
 	// 是否标记新词
 	protected boolean isNewWord = true;
 
-	// 是否选择自定义词典
-	protected boolean userDefine = false;
-
 	/**
 	 * 文档读取流
 	 */
@@ -71,12 +68,17 @@ public abstract class Analysis {
 //		this.isQuantifierRecognition = MyStaticValue.isQuantifierRecognition;
 //		this.isRealName = MyStaticValue.isRealName;
 //		this.isNewWord = MyStaticValue.isNewWord;
-//		this.userDefine = false;
-		this(false);
+		this(DicLibrary.DEFAULT);
 	}
 
-	protected Analysis(boolean userDefine) {
-		this.forests = new Forest[]{ userDefine ? UserDicLibrary.get() : DicLibrary.get() };
+	protected Analysis(String key) {
+
+		if (key.equalsIgnoreCase(DicLibrary.DEFAULT)){
+			this.forests = new Forest[]{DicLibrary.get()};
+		}else {
+			Forest forest = DicLibrary.get(key);
+			this.forests = new Forest[]{ forest!=null?forest : DicLibrary.get() };
+		}
 		this.isNameRecognition = MyStaticValue.isNameRecognition;
 		this.isNumRecognition = MyStaticValue.isNumRecognition;
 		this.isQuantifierRecognition = MyStaticValue.isQuantifierRecognition;

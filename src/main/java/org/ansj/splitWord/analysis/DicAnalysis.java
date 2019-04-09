@@ -122,6 +122,10 @@ public class DicAnalysis extends Analysis {
 		super();
 	}
 
+	public DicAnalysis(String userDefineKey) {
+		super(userDefineKey);
+	}
+
 	public DicAnalysis(Reader reader) {
 		super.resetContent(new AnsjReader(reader));
 	}
@@ -132,5 +136,13 @@ public class DicAnalysis extends Analysis {
 
 	public static Result parse(String str, Forest... forests) {
 		return new DicAnalysis().setForests(forests).parseStr(str);
+	}
+
+	public static Result parse(String userDefineKey, String str) {
+		return new DicAnalysis(userDefineKey).parseStr(str);
+	}
+
+	public static Result parse(String userDefineKey, String str, Forest... forests) {
+		return new DicAnalysis(userDefineKey).setForests(forests).parseStr(str);
 	}
 }

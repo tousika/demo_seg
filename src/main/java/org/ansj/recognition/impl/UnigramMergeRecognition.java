@@ -17,9 +17,10 @@ public class UnigramMergeRecognition implements Recognition {
     private static final Nature PHONE_NATURE = new Nature("phone");
     private static final Map<String,String> nsGroup = new HashMap<>();
     static {
-        nsGroup.put("vn","n");
-        nsGroup.put("nn","nw");
-        nsGroup.put("mv","v");
+        nsGroup.put("v|n","vn");
+        nsGroup.put("n|n","nw");
+        nsGroup.put("m|v","v");
+//        nsGroup.put("nz|n","nz");
     }
     @Override
     public void recognition(Result result) {
@@ -43,12 +44,12 @@ public class UnigramMergeRecognition implements Recognition {
         if (temp.getName().length()>1 || to==null || to.getName().length()>1){
             return false;
         }
-        ns = temp.getNatureStr()+to.getNatureStr();
+        ns = String.join("|",temp.getNatureStr(), to.getNatureStr());
         if(nsGroup.containsKey(ns)){
             toMax = to.to();
             if (toMax != null && toMax.getName().length()==1 && "n".equals(toMax.getNatureStr())) {return false;}
             temp.setName(temp.getName()+to.getName());
-            temp.setRealName(temp.getName());
+            temp.setRealName(temp.getName()+to.getName());
             temp.setNature(new Nature(nsGroup.get(ns)));
             temp.setTo(toMax);
 //            TermUtil.termLink(temp, toMax);

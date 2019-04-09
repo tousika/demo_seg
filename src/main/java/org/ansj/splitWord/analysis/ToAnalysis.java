@@ -74,8 +74,8 @@ public class ToAnalysis extends Analysis {
 		super();
 	}
 
-	public ToAnalysis(boolean userDefine) {
-		super(userDefine);
+	public ToAnalysis(String userDefineKey) {
+		super(userDefineKey);
 	}
 
 	public ToAnalysis(Reader reader) {
@@ -90,12 +90,12 @@ public class ToAnalysis extends Analysis {
 		return new ToAnalysis().setForests(forests).parseStr(str);
 	}
 
-	public static Result parse(boolean userDefine, String str) {
-		return new ToAnalysis(userDefine).parseStr(str);
+	public static Result parse(String userDefineKey, String str) {
+		return new ToAnalysis(userDefineKey).parseStr(str);
 	}
 
-	public static Result parse(boolean userDefine, String str, Forest... forests) {
-		return new ToAnalysis(userDefine).setForests(forests).parseStr(str);
+	public static Result parse(String userDefineKey, String str, Forest... forests) {
+		return new ToAnalysis(userDefineKey).setForests(forests).parseStr(str);
 	}
 
 }

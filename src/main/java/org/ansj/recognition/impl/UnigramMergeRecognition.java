@@ -17,9 +17,9 @@ public class UnigramMergeRecognition implements Recognition {
     private static final Nature PHONE_NATURE = new Nature("phone");
     private static final Map<String,String> nsGroup = new HashMap<>();
     static {
-        nsGroup.put("v|n","vn");
-        nsGroup.put("n|n","nw");
-        nsGroup.put("m|v","v");
+        nsGroup.put("v|n","vn1");
+        nsGroup.put("n|n","nw1");
+        nsGroup.put("m|v","v1");
 //        nsGroup.put("nz|n","nz");
     }
     @Override

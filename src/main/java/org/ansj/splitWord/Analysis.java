@@ -324,6 +324,8 @@ public abstract class Analysis {
 	 * @return
 	 */
 	public Result parseStr(String temp) {
+		//保证服务快速处理，标点符号连续出现10次（考虑转移符都是偶数个）以上的进行过滤
+		temp = temp.replaceAll("[\\pP‘’“”]{10,}", ",");
 		return new Result(analysisStr(temp));
 	}
 

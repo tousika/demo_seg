@@ -27,6 +27,10 @@ import java.util.Map;
  */
 public class PersonRecognition implements TermArrRecognition {
 
+	/**
+	 * https://blog.csdn.net/adnb34g/article/details/83268490
+	 * 解释B~A的含义
+	 */
 	private static final int B = 0, C = 1, D = 2, E = 3, K = 4, L = 5, M = 6, X = 7, Y = 8, Z = 9, A = 10;
 
 	private static final Log LOG = LogFactory.getLog();
@@ -276,7 +280,10 @@ public class PersonRecognition implements TermArrRecognition {
 			}
 
 			sencond = first.to();
-			if (sencond.getOffe() == terms.length || sencond.getName().length() > 2) { //说明到结尾了,或者后面长度不符合规则
+			if (sencond.getOffe() == terms.length || sencond.getName().length() > 2
+					|| ("w".equals(sencond.getNatureStr()) && !"·".equals(sencond.getName()))) { //说明到结尾了,或者后面长度不符合规则
+				// 增加w词性的相关判断，过滤掉不应该计算的维特比路径，下同
+				// bad case：64岁濮存昕将演绎《李尔王》飚演技 胡须花白一脸桀骜个性十足
 				continue;
 			}
 
@@ -290,16 +297,20 @@ public class PersonRecognition implements TermArrRecognition {
 				setNode(from, M);
 				setNode(first, X);
 				setNode(sencond, D);
-				setNode(third, M);
-				setNode(third, L);
+				if(!"w".equals(third.getNatureStr()) || "·".equals(third.getName())){
+					setNode(third, M);
+					setNode(third, L);
+				}
 				continue;
 			}
 
 			setNode(from, K);
 			setNode(from, M);
 			setNode(first, B);
-			setNode(third, M);
-			setNode(third, L);
+			if(!"w".equals(third.getNatureStr()) || "·".equals(third.getName())){
+				setNode(third, M);
+				setNode(third, L);
+			}
 			//BZ
 			if (sencond.getName().length() == 2) {
 				setNode(sencond, Z);
@@ -309,17 +320,19 @@ public class PersonRecognition implements TermArrRecognition {
 			}
 
 
-			if (third.getOffe() == terms.length || third.getName().length() > 1) { //说明到结尾了,或者后面长度不符合规则
+			if (third.getOffe() == terms.length || third.getName().length() > 1
+				|| ("w".equals(third.getNatureStr()) && !"·".equals(third.getName()))) { //说明到结尾了,或者后面长度不符合规则
 				continue;
 			}
 
 			//BCD
 			setNode(first, B);
 			setNode(sencond, C);
-			setNode(third, D);
-			setNode(third.to(), M);
-			setNode(third.to(), L);
-
+			if(!"w".equals(third.getNatureStr()) || "·".equals(third.getName())){
+				setNode(third, D);
+				setNode(third.to(), M);
+				setNode(third.to(), L);
+			}
 		}
 		PersonNatureAttr begin = DATDictionary.person("BEGIN");
 

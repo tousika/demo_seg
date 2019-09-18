@@ -1,125 +1,171 @@
 package org.ansj.recognition.impl;
 
-import org.ansj.domain.Nature;
-import org.ansj.domain.Result;
-import org.ansj.domain.Term;
+import org.ansj.domain.*;
 import org.ansj.recognition.Recognition;
-import org.ansj.util.TermUtil;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Created by dongsijia on 2018/11/8.
+ * Created by dongsijia on 2019/5/6.
  */
 public class UnigramMergeRecognition implements Recognition {
 
     private static final long serialVersionUID = 6804487354300627672L;
-    private static final Nature PHONE_NATURE = new Nature("phone");
     private static final Map<String,String> nsGroup = new HashMap<>();
+    private static final Map<String,String> mqGroup = new HashMap<>();
     static {
         nsGroup.put("v|n","vn1");
+        nsGroup.put("vn|n","vn1");
         nsGroup.put("n|n","nw1");
+        nsGroup.put("ns|ng","nw1");
+        nsGroup.put("b|n","nw1");
         nsGroup.put("m|v","v1");
-//        nsGroup.put("nz|n","nz");
+        mqGroup.put("en|m","mq");//g20,iphone5
+        mqGroup.put("m|en","mq");//4G,320Li
+        //        nsGroup.put("nz|n","nz");
     }
     @Override
     public void recognition(Result result) {
-        List<Term> list = result.getTerms();
-        Iterator<Term> iterator = list.iterator();
+        wordMerge(result);
 
-        while (iterator.hasNext()) {
-            Term term = iterator.next();
-            if (merge(term)) {
-                iterator.next();
-                iterator.remove();
-            }
-        }
 
     }
-    private boolean merge(Term temp) {
+    private static boolean merge(Term temp) {
         Term to = temp.to();
         Term toMax = null;
-        String ns = "";
-        if(temp==null) {return false;}
-        if (temp.getName().length()>1 || to==null || to.getName().length()>1){
-            return false;
-        }
-        ns = String.join("|",temp.getNatureStr(), to.getNatureStr());
+        //        String ns = "";
+        if(temp==null || to==null) {return false;}
+        String ns = String.join("|",temp.getNatureStr(), to.getNatureStr());
         if(nsGroup.containsKey(ns)){
             toMax = to.to();
-            if (toMax != null && toMax.getName().length()==1 && "n".equals(toMax.getNatureStr())) {return false;}
-            temp.setName(temp.getName()+to.getName());
-            temp.setRealName(temp.getName()+to.getName());
+            if (temp.getName().length()>1
+                    || to.getName().length()>1
+                    || (toMax != null && toMax.getName().length()==1 && "n".equals(toMax.getNatureStr()))) {return false;}
+            temp.merageWithBlank(to);
             temp.setNature(new Nature(nsGroup.get(ns)));
-            temp.setTo(toMax);
-//            TermUtil.termLink(temp, toMax);
             return true;
+        }else if(mqGroup.containsKey(ns)
+                && to.getOffe()==temp.getOffe()+temp.getRealName().length()){//原文里不含空格
+            if ("m".equals(temp.getNatureStr())){//m|en
+                temp.merageWithBlank(to);
+                temp.setNature(new Nature(mqGroup.get(ns)));
+            }else if(temp.getRealName().length()<3){//en|m
+                temp.merageWithBlank(to);
+                temp.setNature(new Nature(mqGroup.get(ns)));
+            }else{//en|m
+                temp.merageWithBlank(to);
+                temp.setNature(new Nature(mqGroup.get(ns)));
+            }
         }
         return false;
     }
-    public void recognition2(Result result) {
-        List<Term> terms = new ArrayList<>();
-//        Term term = null;
-        Term to = null;
-        Term temp = null;
-        String ns = "";
-        int size = result.getTerms().size();
-        for (int i = 0; i < size; i++) {
-            temp = result.getTerms().get(i);
-            if(temp==null){
-//                terms.add(temp);
-                continue;
-            }
-            if (temp.getName().length()>1 || result.getTerms().get(i+1).getName().length()>1){
-                continue;
-            }
-            ns = temp.getNatureStr()+result.getTerms().get(i+1).getNatureStr();
-            if(nsGroup.containsKey(ns)){
-                //                    if (i+2<size) {
-                //                        //合并
-                //                        if (terms.get(i+2).getName().length()==1 && "n".equals(terms.get(i+2).getNatureStr())) continue;
-                //                        wordMerge();
-                //                    }else {
-                //                        wordMerge();
-                //                    }
-                if(i+2>=size //没有后缀单字
-                        || result.getTerms().get(i+2).getName().length()>1 //后面可成词
-                        || !"n".equals(result.getTerms().get(i+2).getNatureStr())) {
-                    to = temp.to() ;
-                    temp.setName(temp.getName()+to.getName());
-                    terms.remove(to.getOffe());
-                    //            terms.get(to.getOffe()) = null ;
-                    TermUtil.termLink(temp, to.to());
-                    to = to.to() ;
-                    if(temp.getName().length()>1){
-                        i-- ;
-                        terms.add(temp);
-                        continue;
+    private static void wordMerge(Result result){
+        Term to,toMax;
+        Term tmp = null;
+        List<Term> terms = result.getTerms();
+        List<Term> list = new LinkedList<Term>();
+        boolean isTrue;
+        for (int i = 0; i < terms.size(); i++) {
+            isTrue = false;
+            if(terms.get(i)!=null && terms.get(i).to()!=null) {
+                to = terms.get(i).to();
+                toMax = to.to();
+                String ns = String.join("|",terms.get(i).getNatureStr(), to.getNatureStr());
+                if(nsGroup.containsKey(ns)){
+                    if (terms.get(i).getName().length()<=2
+                            && to.getName().length()<=2
+                            && (terms.get(i).getName().length()+to.getName().length())<=3
+                            && (toMax == null || toMax.getName().length()>1 || !"n".equals(toMax.getNatureStr()))) {
+                        terms.get(i).merageWithBlank(to);
+                        terms.get(i).setNature(new Nature(nsGroup.get(ns)));
+                        isTrue = true;
+                    }
+                }else if(mqGroup.containsKey(ns)
+                        && to.getOffe()==terms.get(i).getOffe()+terms.get(i).getRealName().length()){//原文里不含空格
+                    //SNEC第十二届,考虑‘第’这样的词性也是mq，要进一步严格
+                    boolean isNum = ns.indexOf("m")==0? isAllNum(terms.get(i).getName()):isAllNum(to.getName());
+                    if (isNum){
+                        if ("m".equals(terms.get(i).getNatureStr())
+                                || ("en".equals(terms.get(i).getNatureStr()) && terms.get(i).getRealName().length()<3)){
+                            terms.get(i).merageWithBlank(to);
+                            terms.get(i).setNature(new Nature(mqGroup.get(ns)));
+                            isTrue = true;
+                        }else if("en".equals(terms.get(i).getNatureStr()) && terms.get(i).getRealName().length()>=3){//en|m
+                            tmp = new Term(terms.get(i).getName(),terms.get(i).getOffe(), TermNatures.EN);//iphone,5->iphone5,iphone
+                            terms.get(i).merageWithBlank(to);
+                            terms.get(i).setNature(new Nature(mqGroup.get(ns)));
+                            isTrue = true;
+                        }
                     }
                 }
             }
-//            if (!"v".equals(term.getNatureStr()) || term.getName().length()>1 || term.next()!=null){
-//                continue;
-//            }
-//            if (!"v".equals(terms.get(i+1).getNatureStr()) || terms.get(i+1).getName().length()>1 || terms.get(i+1).next()!=null){
-//                continue;
-//            }
-
+            list.add(terms.get(i));
+            if(isTrue){
+                i++;
+                if (tmp !=null){
+                    list.add(tmp);
+                    tmp = null;
+                }
+            }
         }
+        result.setTerms(list);
     }
-    private void wordMerge(){
+    /**
+     * 是否全是数字
+     * @param str
+     * @return
+     */
+    public static boolean isAllNum(String str) {
+        if (str == null)
+            return false;
 
+        int i = 0;
+        /** 判断开头是否是+-之类的符号 */
+        if ("±+-＋－—".indexOf(str.charAt(0)) != -1)
+            i++;
+        /** 如果是全角的０１２３４５６７８９ 字符* */
+        while (i < str.length() && "０１２３４５６７８９".indexOf(str.charAt(i)) != -1)
+            i++;
+        // Get middle delimiter such as .
+        if (i > 0 && i < str.length())
+        {
+            char ch = str.charAt(i);
+            if ("·∶:，,．.／/".indexOf(ch) != -1)
+            {// 98．1％
+                i++;
+                while (i < str.length() && "０１２３４５６７８９".indexOf(str.charAt(i)) != -1)
+                    i++;
+            }
+        }
+        if (i >= str.length())
+            return true;
+
+        /** 如果是半角的0123456789字符* */
+        while (i < str.length() && "0123456789".indexOf(str.charAt(i)) != -1)
+            i++;
+        // Get middle delimiter such as .
+        if (i > 0 && i < str.length())
+        {
+            char ch = str.charAt(i);
+            if (',' == ch || '.' == ch || '/' == ch  || ':' == ch || "∶·，．／".indexOf(ch) != -1)
+            {// 98．1％
+                i++;
+                while (i < str.length() && "0123456789".indexOf(str.charAt(i)) != -1)
+                    i++;
+            }
+        }
+
+        if (i < str.length())
+        {
+            if ("百千万亿佰仟%％‰".indexOf(str.charAt(i)) != -1)
+                i++;
+        }
+        if (i >= str.length())
+            return true;
+
+        return false;
     }
-//    private Term getMaxTerm(Term maxTerm) {
-////        Term maxTerm = terms.get(0);
-//        if (maxTerm == null) {
-//            return null;
-//        }
-//        Term term = maxTerm;
-//        while ((term = term.next()) != null) {
-//            maxTerm = term;
-//        }
-//        return maxTerm;
-//    }
-
 }

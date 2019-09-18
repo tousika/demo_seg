@@ -8,3 +8,16 @@
 3.自定义词一般是专属名词，不想拆分的特定词，
 如果分词器自动拆出来的所有term都是n开始的词性，就没有必要加入自定义词典
 但是"张馨予结婚"不符合词规律，但是本身是主谓结构构成句子就不应该加入自定义词典
+4.core.dic：词的index为前缀词的base+末字
+讲解https://blog.csdn.net/huoxue_2012/article/details/78492788
+https://blog.csdn.net/admin_cx/article/details/75354008
+ex：index(一举一)=base(一举)+hashcode(动)
+85508	一举一	65536	85568	1	null
+85544	一举两	65536	85568	1	null
+85568	一举	65540	19968	2	{d=21}
+86696	一举一动	65536	85508	3	{i=2}
+87053	一举成名	65536	90644	3	{i=0}
+90007	一举两得	65536	85544	3	{i=1}
+90644	一举成	65536	85568	1	null
+5.https://www.2cto.com/net/201606/517866.html
+6.人名识别：https://www.cnblogs.com/royhoo/p/6716468.html

@@ -31,15 +31,15 @@ public class ToAnalysis extends Analysis {
 
 				graph.walkPath();
 
+				// 数字发现
+				if (isNumRecognition) {
+					new NumRecognition(isQuantifierRecognition && graph.hasNumQua).recognition(graph);
+				}
+
 				// 姓名识别
 				if (graph.hasPerson && isNameRecognition) {
 					// 人名识别
 					new PersonRecognition().recognition(graph);
-				}
-
-				// 数字发现
-				if (isNumRecognition) {
-					new NumRecognition(isQuantifierRecognition && graph.hasNumQua).recognition(graph);
 				}
 
 				// 用户自定义词典的识别

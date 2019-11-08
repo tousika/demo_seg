@@ -20,4 +20,7 @@ ex：index(一举一)=base(一举)+hashcode(动)
 90007	一举两得	65536	85544	3	{i=1}
 90644	一举成	65536	85568	1	null
 5.https://www.2cto.com/net/201606/517866.html
-6.人名识别：https://www.cnblogs.com/royhoo/p/6716468.html
+6.人名识别：
+    https://www.cnblogs.com/royhoo/p/6716468.html
+    https://blog.csdn.net/adnb34g/article/details/83268490
+    personNodeTag.jpg

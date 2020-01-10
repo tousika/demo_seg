@@ -31,9 +31,11 @@ public class ToAnalysis extends Analysis {
 			@Override
 			public List<Term> merger() {
 
-//				forwardMax(graph, forests);
+				forwardMax(graph, forests);
 
 				graph.walkPath();
+				// 用户自定义词典的识别
+				userDefineRecognition(graph, forests);
 
 				// 数字发现
 				if (isNumRecognition) {
@@ -44,35 +46,34 @@ public class ToAnalysis extends Analysis {
 					// 人名识别
 					new PersonRecognition().recognition(graph);
 				}
-                // 用户自定义词典的识别
-				userDefineRecognition(graph, forests);
+
 				return getResult();
 			}
-//			//正向最大匹配
-//			private void forwardMax(final Graph graph, Forest... forests){
-//				String temp = null;
-//				int min=0,max=-1;
-//				Map<Integer, Term> map = new HashMap<>();
-//				if (forests != null) {
-//					for (Forest forest : forests) {
-//						if (forest == null) {
-//							continue;
-//						}
-//						GetWord word = forest.getWord(graph.chars);
-//						while ((temp = word.getAllWords()) != null) {
-//							if ((word.offe==min || word.offe>max) && myDicNatures.contains(word.getParam(0)) ){
-////								terms[word.offe] = new Term(temp, word.offe, word.getParam(0), ObjConver.getIntValue(word.getParam(1)));
-//								map.put(word.offe, new Term(temp, word.offe, word.getParam(0), ObjConver.getIntValue(word.getParam(1))));
-//								min = word.offe;
-//								max = word.offe+temp.length()-1;
-//							}
-//						}
-//					}
-//				}
-//				for (Map.Entry<Integer, Term> e : map.entrySet()){
-//					TermUtil.insertTerm(graph.terms, e.getValue(),InsertTermType.SKIP);
-//				}
-//			}
+			//正向最大匹配
+			private void forwardMax(final Graph graph, Forest... forests){
+				String temp = null;
+				int min=0,max=-1;
+				Map<Integer, Term> map = new HashMap<>();
+				if (forests != null) {
+					for (Forest forest : forests) {
+						if (forest == null) {
+							continue;
+						}
+						GetWord word = forest.getWord(graph.chars);
+						while ((temp = word.getAllWords()) != null) {
+							if ((word.offe==min || word.offe>max) && myDicNatures.contains(word.getParam(0)) ){
+//								terms[word.offe] = new Term(temp, word.offe, word.getParam(0), ObjConver.getIntValue(word.getParam(1)));
+								map.put(word.offe, new Term(temp, word.offe, word.getParam(0), ObjConver.getIntValue(word.getParam(1))));
+								min = word.offe;
+								max = word.offe+temp.length()-1;
+							}
+						}
+					}
+				}
+				for (Map.Entry<Integer, Term> e : map.entrySet()){
+					TermUtil.insertTerm(graph.terms, e.getValue(),InsertTermType.SKIP);
+				}
+			}
 
 			private void userDefineRecognition(final Graph graph, Forest... forests) {
 				new UserDefineRecognition(InsertTermType.SKIP, forests).recognition(graph);

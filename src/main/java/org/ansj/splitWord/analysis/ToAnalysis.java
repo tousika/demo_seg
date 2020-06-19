@@ -34,8 +34,8 @@ public class ToAnalysis extends Analysis {
 				forwardMax(graph, forests);
 
 				graph.walkPath();
-				// 用户自定义词典的识别
-				userDefineRecognition(graph, forests);
+
+//				userDefineRecognition(graph, forests);
 
 				// 数字发现
 				if (isNumRecognition) {
@@ -46,7 +46,8 @@ public class ToAnalysis extends Analysis {
 					// 人名识别
 					new PersonRecognition().recognition(graph);
 				}
-
+				// 用户自定义词典的识别
+				userDefineRecognition(graph, forests);
 				return getResult();
 			}
 			//正向最大匹配

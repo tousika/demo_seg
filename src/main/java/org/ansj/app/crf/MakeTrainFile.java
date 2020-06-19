@@ -52,7 +52,8 @@ public class MakeTrainFile {
 				}
 				List<Element> list = Config.makeToElementList(temp, "\\s+");
 				for (Element element : list) {
-					sb.append(element.nameStr() + " " + Config.getTagName(element.getTag()));
+//					sb.append(element.nameStr() + " " + Config.getTagName(element.getTag()));
+					sb.append(element.nameStr() + "\t" + Config.getTagName(element.getTag()));
 					sb.append("\n");
 				}
 				fos.write(sb.toString().getBytes(IOUtil.UTF8));

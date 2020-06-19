@@ -21,6 +21,7 @@ public class UnigramMergeRecognition implements Recognition {
         nsGroup.put("vn|n","vn1");
         nsGroup.put("n|n","nw1");
         nsGroup.put("ns|ng","nw1");
+        nsGroup.put("t|n","nw1");//现代风
         nsGroup.put("b|n","nw1");
         nsGroup.put("m|v","v1");
         mqGroup.put("en|m","mq");//g20,iphone5

@@ -142,6 +142,9 @@ public abstract class Analysis {
 	 * @return
 	 */
 	private List<Term> analysisStr(String temp) {
+
+//		Class s = this.getClass();
+
 		if(temp==null || temp.length()==0){
 			return Collections.emptyList() ;
 		}

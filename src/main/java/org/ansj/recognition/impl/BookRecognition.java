@@ -48,7 +48,7 @@ public class BookRecognition implements Recognition {
                         book.merageWithBlank(book.to());
                     }
                     String[] split = book.getName().split(bookRightFlag);// 文章不规范，有左书名号但是没有右书名号的情况
-                    if (split.length>0){
+                    if (split.length>1){
                         book.setNature(nature);
                         book.setName(split[0]);
                         book.setRealName(split[0]);

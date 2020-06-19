@@ -1,6 +1,8 @@
 package org.ansj;
 
 import org.ansj.domain.Term;
+import org.ansj.library.DicLibrary;
+import org.nlpcn.commons.lang.tire.domain.Forest;
 import org.nlpcn.commons.lang.util.ObjConver;
 
 import java.text.SimpleDateFormat;
@@ -12,19 +14,26 @@ import java.util.*;
 public class Test1 {
 
     public static void main(String[] args) {
-        String regex = "[>)》）]+";
-        String[] split = "李尔王>很好)打好》版本）".split(regex);
-        for (String s : split) {
-            System.out.println(s);
-        }
-
-        System.exit(0);
-        System.out.println("车"+"车".hashCode());
-        System.out.println("两"+"两".hashCode());
-        System.out.println("成"+"成".hashCode());
-        System.out.println("动"+"动".hashCode());
-        System.out.println("得"+"得".hashCode());
-        System.out.println("名"+"名".hashCode());
+        Forest forest1 = DicLibrary.get("dic_editorial");
+        System.out.println("--");
+//        String regex = "[>)》）]+";
+//        String[] split = "李尔王>很好)打好》版本）".split(regex);
+//        for (String s : split) {
+//            System.out.println(s);
+//        }
+//        System.out.println("---");
+//        String[] split1 = "李尔王".split(regex);
+//        for (String s : split1) {
+//            System.out.println(s);
+//        }
+//
+//        System.exit(0);
+//        System.out.println("车"+"车".hashCode());
+//        System.out.println("两"+"两".hashCode());
+//        System.out.println("成"+"成".hashCode());
+//        System.out.println("动"+"动".hashCode());
+//        System.out.println("得"+"得".hashCode());
+//        System.out.println("名"+"名".hashCode());
 }
 
     private int[] GetMaxAndSecondWord(String subStr, List<Term> terms){

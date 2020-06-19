@@ -88,7 +88,8 @@ public class Graph {
 
 	/**
 	 * 取得最优路径的root Term
-	 *
+	 * bug:双向马尔科夫对于交叉型歧义更倾向于后者：继日产前CEO卡洛斯·戈恩=>日,产前
+	 * 日产 产前词频相同的情况下更倾向后者交叉，调整词频让日产的词频大于产前即可
 	 * @return
 	 */
 	protected Term optimalRoot() {

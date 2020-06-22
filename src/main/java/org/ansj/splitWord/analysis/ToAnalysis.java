@@ -34,7 +34,7 @@ public class ToAnalysis extends Analysis {
 			@Override
 			public List<Term> merger() {
 
-//				forwardMax(graph, forests);
+//				forwardMax(graph,  forests);
 
 				graph.walkPath();
 

@@ -96,10 +96,15 @@ public class UserDefineRecognition implements TermArrRecognition {
 							makeNewTerm();
 						}
 					}
-				} else if (branch.getStatus() == 1) {
+				} else if (i<length-1 && branch.getStatus() == 1) {
 					if (offe == -1) {
 						offe = i;
 					}
+				} else if (i==length-1){//自定义词：中国,证券,中国证券xxx，解决识别不出证券的问题
+					if (offe != -1) {
+						i = offe;
+					}
+					reset();
 				}
 			}
 			if (offe != -1 && offe < endOffe) {

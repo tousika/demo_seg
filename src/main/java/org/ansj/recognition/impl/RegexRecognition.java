@@ -23,7 +23,7 @@ public class RegexRecognition implements Recognition {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final Nature nature = new Nature("t");
+	private static final Nature nature = new Nature("a");
 
 	@Override
 	public void recognition(Result result) {
@@ -35,7 +35,7 @@ public class RegexRecognition implements Recognition {
 
 		Pattern pattern = Pattern
 				.compile(
-						"(当前|本地|当地)时间|第?([0123456789]{1,3}(届|轮|任|场|局|季|节|公斤级?))|第?([一二三四五六七八九十]{1,2}(届|轮|任|场|局|季|节|公斤级?))|((\\d|[０１２３４５６７８９]){1,2})(/|至|到)((\\d|[０１２３４５６７８９]){1,2})|((\\d|[０１２３４５６７８９]){1,3})(-)((\\d|[０１２３４５６７８９]){1,3})",
+						"(当前|本地|当地)时间|第?([0123456789]{1,3}(届|轮|任|场|局|季|节|公斤级?))|第?([一二三四五六七八九十]{1,2}(届|轮|任|场|局|季|节|公斤级?))|((\\d|[０１２３４５６７８９]){1,2})(/|至|到)((\\d|[０１２３４５６７８９]){1,2})|((\\d|[０１２３４５６７８９]){1,4})(\\s{0,2}(-|:|：)\\s{0,2})((\\d|[０１２３４５６７８９]){1,4})",
 						Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
 		int index = 10;//matcher.groups总数,pattern变了总数也要变
 		for (int i = 0; i < terms.size(); i++) {
@@ -47,7 +47,7 @@ public class RegexRecognition implements Recognition {
 			Term termBase = terms.get(i);
 			int timeTermsLength = 1;
 			int matchLength = 0; //匹配长度
-			for (int j = i; j < terms.size() && matchLength < 5; j++) { //向后最大找14个词匹配是否是时间词
+			for (int j = i; j < terms.size() && matchLength < 7; j++) { //向后最大找14个词匹配是否是时间词
 				Term term = terms.get(j);
 				name = term.getName();
 				timeWord += name;

@@ -127,7 +127,7 @@ public class PairRecognition implements Recognition {
             result.add(ft);
             return result;
         }else{
-//            Pattern p = Pattern.compile("r#.*v#.*r#|r#.*v#.*n|n#.*v#.*n|n#.*v#.*r|n#(?!.*v#)");
+//            Pattern p = Pattern.compile("r#.*v#.*r#|r#.*v#.*n|n#.*v#.*n|n#.*v#.*r|n#(?!.*v#)");//?!不匹配
             Pattern p = Pattern.compile("r#.*v#.*r#|r#.*v#.*n|n#.*v#.*n|n#.*v#.*r");
             System.out.println(String.join("", natureSentence));
             Matcher m = p.matcher(String.join("", natureSentence));

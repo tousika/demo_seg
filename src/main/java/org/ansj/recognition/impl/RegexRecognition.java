@@ -8,6 +8,7 @@ import org.ansj.recognition.Recognition;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,7 +24,15 @@ public class RegexRecognition implements Recognition {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final Nature nature = new Nature("a");
+//	private static final Nature nature = new Nature("a");
+	private Nature nature;
+
+	public RegexRecognition() {
+		this.nature = new Nature("a");
+	}
+	public RegexRecognition(String natureStr) {
+		this.nature = new Nature(natureStr);
+	}
 
 	@Override
 	public void recognition(Result result) {
